@@ -68,3 +68,47 @@ export class player {
         this.gameboard = new gameboard();
     }
 }
+
+export game class {
+    constructor (player1, player2) { // to create subject in this function
+        
+        this.player1 = new player(player1); // create player1 based on the player class before
+        this.player2 = new player(player2); // create player2 based on the player class before
+        this.currentPlayer = this.player1; // define first turn or current turn
+    }
+    
+    switchTurn() // create switch function
+    {
+        this.currentPlayer = this.currentPlayer === this.player1 ? this.player2 : this.player1 ; // means that current player is determined by switching the logic
+        
+    }
+    
+    playTurn() // rules why its turning between two players (after player 1 do the attack, it switches to another player)
+    {
+        
+        
+        let opponent = this.currentPlayer === this.player1 ? this.player2.gameboard : this.player1.gameboard; // determined the opponent
+        
+        opponent.receiveAttack(); // opponent getting attacked
+        
+        if(opponent.allShipsAreDoomed() == true )
+        {
+            
+            console.log(`${this.currentPlayer} WINS`);
+            this.endGame()
+            
+        }
+        else
+        {
+            this.switchTurn();
+        }
+        
+    }
+    
+    endGame()
+    {
+        console.log("GAME OVER");
+    }
+    
+
+}
