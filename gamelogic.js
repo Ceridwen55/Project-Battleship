@@ -69,7 +69,7 @@ export class player {
     }
 }
 
-export game class {
+export class game {
     constructor (player1, player2) { // to create subject in this function
         
         this.player1 = new player(player1); // create player1 based on the player class before
