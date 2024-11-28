@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLOaded", () =>
     renderBoard(gameInstance.player2.gameboard,'player2-board',handleAttack);
 });
 
-function placeShip(gameboard,ship,coordinates)
+export function placeShip(gameboard,ship,coordinates)
 {
     gameboard.shipPosition(ship, coordinates);
 }
