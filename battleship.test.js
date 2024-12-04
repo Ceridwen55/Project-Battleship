@@ -82,3 +82,56 @@ test('create a player with a given name and an empty gameboard', () =>
         expect(aPlayer.gameboard.missedAttack).toEqual([]); 
         expect(aPlayer.gameboard.ships).toEqual([]); 
     });
+
+
+// game class tests
+test('create a game with two players and set player 1 as the current player', () => {
+    const player1Name = 'Alice';
+    const player2Name = 'Bob';
+    const aGame = new game(player1Name, player2Name);
+    expect(aGame.player1.name).toBe(player1Name);
+    expect(aGame.player2.name).toBe(player2Name);
+    expect(aGame.currentPlayer.name).toBe(player1Name);
+});
+
+test('switchTurn function switches the current player', () => {
+    const player1Name = 'Alice';
+    const player2Name = 'Bob';
+    const aGame = new game(player1Name, player2Name);
+    aGame.switchTurn();
+    expect(aGame.currentPlayer.name).toBe(player2Name);
+    aGame.switchTurn();
+    expect(aGame.currentPlayer.name).toBe(player1Name);
+});
+
+test('playTurn function calls receiveAttack on the opponent gameboard', () => {
+    const player1Name = 'Alice';
+    const player2Name = 'Bob';
+    const aGame = new game(player1Name, player2Name);
+    const opponentBoard = aGame.player2.gameboard;
+    opponentBoard.receiveAttack = jest.fn();
+    aGame.playTurn();
+    expect(opponentBoard.receiveAttack).toHaveBeenCalled();
+});
+
+test('playTurn switches turn after an attack if game is not over', () => {
+    const player1Name = 'Alice';
+    const player2Name = 'Bob';
+    const aGame = new game(player1Name, player2Name);
+    aGame.player2.gameboard.allShipsAreDoomed = jest.fn(() => false);
+    aGame.playTurn();
+    expect(aGame.currentPlayer.name).toBe(player2Name);
+    aGame.playTurn();
+    expect(aGame.currentPlayer.name).toBe(player1Name);
+});
+
+test('playTurn ends the game if all opponent ships are doomed', () => {
+    const player1Name = 'Alice';
+    const player2Name = 'Bob';
+    const aGame = new game(player1Name, player2Name);
+    aGame.player2.gameboard.allShipsAreDoomed = jest.fn(() => true);
+    console.log = jest.fn(); // Mock console.log
+    aGame.playTurn();
+    expect(console.log).toHaveBeenCalledWith(`${aGame.player1} WINS`);
+    expect(console.log).toHaveBeenCalledWith('GAME OVER');
+});
